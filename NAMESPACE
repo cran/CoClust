@@ -1,0 +1,14 @@
+
+#import(methods)
+#importFrom(graphics, plot)
+#importFrom(methods, show)
+export(
+CoClust
+)
+exportClasses(
+CoClust
+)
+#exportMethods(
+#plot
+#,show
+#)
