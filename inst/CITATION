@@ -1,0 +1,43 @@
+citHeader("To cite the 'CoClust' package in publications use:")
+
+#if(!exists("meta") || is.null(meta)) meta <- packageDescription("CoClust")
+#year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
+#vers <- paste("R package version", meta$Version)
+
+
+    bibentry(
+         bibtype = "Manual",
+         title = "CoClust: copula based cluster analysis",
+         author = c(
+           person(c("F.", "Marta", "L."), "Di Lascio", role = "aut"),
+           person("Simone", "Giannerini", role = c("aut","cre"), email = "simone.giannerini@unibo.it")
+         ),
+         year = "2012",
+         note = "R package version 0.2-2",
+         url = "http://CRAN.R-project.org/package=CoClust",
+         key = "CoClust-package",
+         textVersion = "Di Lascio F.M.L. and Giannerini S. (2012) CoClust: copula based cluster analysis. R package version 0.2-2, <URL: http://CRAN.R-project.org/package=CoClust>."
+    )
+
+    bibentry(
+        bibtype = "Article",
+        author = c(
+           person(c("F.", "Marta", "L."), "Di Lascio", role = "aut"),
+           person("Simone", "Giannerini", role = c("aut","cre"), email = "simone.giannerini@unibo.it")
+         ),
+        affiliation = "Dipartimento di Scienze Statistiche, Universita' di Bologna, via Belle Arti 41, 40126 Bologna, Italy",
+        title = "A Copula-Based Algorithm for Discovering Patterns of Dependent Observations",
+        journal = "Journal of Classification",
+        publisher = "Springer New York",
+        issn = "0176-4268",
+        keyword = "Mathematics and Statistics",
+        pages = "50-75",
+        volume = "29",
+        issue = "1",
+        url = "http://dx.doi.org/10.1007/s00357-012-9099-y",
+        note = "10.1007/s00357-012-9099-y",
+        year = "2012",
+        key = "CoClust-article",
+        textVersion = "Di Lascio F.M.L. and Giannerini S. (2012) A Copula-Based Algorithm for Discovering Patterns of Dependent Observations, Journal of Classification, Volume 29, Number 1, 50-75."
+    )
+

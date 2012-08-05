@@ -1,0 +1,29 @@
+0.2-7
+   - made the package compliant with the changes in version 0.999-0 of the copula package.
+0.2-6
+   - fixed one buglet
+   - fixed one incompatibility on rgamma with the latest R-devel version in the example.
+0.2-5
+   - eliminated the double computation (before and after the choice of K) of the first part of the classification (on which K is
+	chosen) and modified part of the code accordingly.
+   - added a control on the dimension of matrice.indici3 and index.matrix.
+   - added the slot Dependence to the output. It contains information on the fitted copula model.
+0.2-4
+   - added a check on the possibility of forming a new k-plet candidate to the allocation by means of the remaining observations
+	at step i.
+0.2-3
+    - added the check on the finiteness of the loglikelihood of the copula fit; modified several portions of the
+        code accordingly.
+0.2-2
+    - set  noc = 4.
+    - added some checks on dimset and noc.
+    - changed the check on the loglikelihood of the estimated copula in CoClust_perm.
+    - added the citation file.
+    - updated the documentation on the penalty term.
+    - changed the name of the slot BIC into LLC in the S4 CoClust-class.
+0.2-1
+    - added the slot Index.dimset.
+    - added the penalty switch.
+
+0.2-0
+    - revised version of the package and of the algorithm.

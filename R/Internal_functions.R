@@ -127,9 +127,10 @@ stima_cop <- function (m, nmarg = 3, copula = "frank", method.ma = c("empirical"
             udat <- fit.margin2(dataset=dum)
     }
     fitfin <- try(fitCopula(data = udat, copula = copulah, start = startco, method = method.c), silent = TRUE)
+    if((inherits(fitfin, "try-error")!=TRUE)) LL <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE)
     metodo.fin <- method.c
     h <- 0
-    while(inherits(fitfin, "try-error")==TRUE & h<nmetstima){
+    while(((inherits(fitfin, "try-error")==TRUE) || !is.finite(LL)) & h<nmetstima){
         h <- h+1
         metodo.c <- metodo[h]
         if(metodo.c=="ml"){
@@ -140,10 +141,11 @@ stima_cop <- function (m, nmarg = 3, copula = "frank", method.ma = c("empirical"
         }
         fitfin <- try(fitCopula(data = udat, copula = copulah,
             start = startco, method = metodo.c), silent = TRUE)
+        if((inherits(fitfin, "try-error")!=TRUE)) LL <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE)
         metodo.fin <- metodo.c
     }
     hm <- 0
-    while(inherits(fitfin, "try-error")==TRUE & hm<nmetstima0){
+    while(((inherits(fitfin, "try-error")==TRUE) || !is.finite(LL)) & hm<nmetstima0){
         hm <- hm+1
         metodo.c <- metodo0[hm]
         if(metodo.c=="ml"){
@@ -155,23 +157,26 @@ stima_cop <- function (m, nmarg = 3, copula = "frank", method.ma = c("empirical"
         h <- 1
         fitfin <- try(fitCopula(data = udat, copula = copulah,
                 start = startco, method = metodo.c, optim.method=metodo.opt[h]), silent = TRUE)
+        if((inherits(fitfin, "try-error")!=TRUE)) LL <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE)
         metodo.fin <- metodo.opt[h]
-        while(inherits(fitfin, "try-error")==TRUE & h<nmetopt){
+        while(((inherits(fitfin, "try-error")==TRUE)||!is.finite(LL)) & h<nmetopt){
             h <- h+1
             fitfin <- try(fitCopula(data = udat, copula = copulah,
                         start = startco, method = metodo.c, optim.method=metodo.opt[h]), silent = TRUE)
+            if((inherits(fitfin, "try-error")!=TRUE)) LL <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE)
             metodo.fin <- metodo.opt[h]
         }
     }
-    if (inherits(fitfin, "try-error")) {
-        return(cat("Clustering failed"))
+    if(((inherits(fitfin, "try-error")==TRUE) || !is.finite(LL))) {
+        class(fitfin) <- "try-error"
+        return(fitfin)
     }else {
         list(
         Param <- fitfin@estimate,
         se <- as.numeric(sqrt(fitfin@var.est)),
         zvalue <- Param/se,
         pvalue <- as.numeric((1 - pnorm(abs(zvalue))) * 2),
-        LogLik <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE),
+        LogLik <- LL,
         Estimation.Method <- fitfin@method,
         Optim.Method <- metodo.fin
         )
@@ -180,14 +185,16 @@ stima_cop <- function (m, nmarg = 3, copula = "frank", method.ma = c("empirical"
 ## **************************************************************************************************
 
 CoClust_perm <- function (m, mindex, nmarg = 3, copula = "frank", method.ma = c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"), dfree, ...){
-    # mindex: matrice indici di riga con le logverosimigl fino a quella di posto (nrow(mindex)-1)
+    # mindex: matrice indici di riga con le loglik fino a quella di posto (nrow(mindex)-1)
     # m: geni in riga
     n.col <- dim(m)[2]
     #
     if(is.vector(mindex) || nrow(mindex)==1){
         fitfin <- stima_cop(m[mindex[1:nmarg],], nmarg = nmarg, copula = copula, method.ma, method.c,dfree)
-        result <- matrix(c(mindex[1:nmarg], fitfin[[5]]),nrow=1,byrow=TRUE)
-        mfin <- t(m[mindex[1:nmarg],])
+        if(class(fitfin)!="try-error"){
+            result <- matrix(c(mindex[1:nmarg], fitfin[[5]]),nrow=1,byrow=TRUE)
+            mfin <- t(m[mindex[1:nmarg],])
+        }
     }else{
         noc <- nrow(mindex)
         result <- matrix(0, nrow = noc, ncol = (nmarg + 1))
@@ -204,12 +211,13 @@ CoClust_perm <- function (m, mindex, nmarg = 3, copula = "frank", method.ma = c(
                 dum <- cbind(t(mfin[(1:(n.col*(noc-1))), ]), m[combinat[j, ], ])
                     # dum ha i geni in riga
                 fitc <- stima_cop(dum, nmarg = nmarg, copula = copula, method.ma, method.c,dfree)
-                if (inherits(fitc, "try-error") || is.nan(fitc[[5]])){
-                    logl[j] <- 0
+                if(inherits(fitc, "try-error")){
+                    logl[j] <- -.Machine$double.xmax
                 }else{
                     logl[j] <- fitc[[5]]
                 }
             } # end ntry
+            ## TODO fare un while su res3 in modo tale che se fitfin della k-pla selezionata dà errore allora sceglie le altre permutazioni
             res3 <- cbind(combinat, logl)
             result[noc,1:nmarg] <- res3[which.max(logl),1:nmarg]
             mfin[((noc-1)*n.col + 1):(noc*n.col), ] <- t(m[result[noc, 1:nmarg], ])
@@ -220,18 +228,20 @@ CoClust_perm <- function (m, mindex, nmarg = 3, copula = "frank", method.ma = c(
             nam[j] <- paste("Cluster", j, sep = "")
             colnames(mfin) <- nam
         }
-        fitfin <- stima_cop(dum, nmarg = nmarg, copula = copula, method.ma, method.c,dfree)
-        result[noc, nmarg+1] <- fitfin[[5]]
+        fitfin <- stima_cop(dum, nmarg = nmarg, copula = copula, method.ma, method.c, dfree)
+        if(class(fitfin)!="try-error"){
+            result[noc, nmarg+1] <- fitfin[[5]]
+        }
     }
-    if (inherits(fitfin, "try-error")) {
-        return(cat("Clustering failed"))
+    if(class(fitfin)=="try-error"){
+        return(fitfin)
     }else{
-        Param <- fitfin[[1]]
-        se <- fitfin[[2]]
+        Param  <- fitfin[[1]]
+        se     <- fitfin[[2]]
         zvalue <- Param/se
         pvalue <- as.numeric((1 - pnorm(abs(zvalue))) * 2)
         depfin <- list(Param = Param, Std.Err = se, P.value = pvalue)
-        list(
+        return(list(
         Number.of.Clusters <- as.integer(nmarg),
         Index.Matrix <- result,
         Data.Clusters <- mfin,
@@ -239,7 +249,7 @@ CoClust_perm <- function (m, mindex, nmarg = 3, copula = "frank", method.ma = c(
         LogLik <- fitfin[[5]],
         Estimation.Method <- fitfin[[6]],
         Optim.Method <- fitfin[[7]]
-        )
+        ))
     }
 }
 ## **************************************************************************************************
