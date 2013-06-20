@@ -1,3 +1,9 @@
+0.2-9
+   - added a control on the dimension of the matrix of observations to be allocated (m2) 
+   - added a control on the row index matrix of observations to be allocated (RV2) post selection of the number of clusters.
+0.2-8
+   - elimintaed the hideWarnings in the loglikCopula function because it deprecated and no 
+	longer used; the warning messages are now suppressed by suppressWarnings(.).
 0.2-7
    - made the package compliant with the changes in version 0.999-0 of the copula package.
 0.2-6

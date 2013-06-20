@@ -127,7 +127,7 @@ stima_cop <- function (m, nmarg = 3, copula = "frank", method.ma = c("empirical"
             udat <- fit.margin2(dataset=dum)
     }
     fitfin <- try(fitCopula(data = udat, copula = copulah, start = startco, method = method.c), silent = TRUE)
-    if((inherits(fitfin, "try-error")!=TRUE)) LL <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE)
+    if((inherits(fitfin, "try-error")!=TRUE)) LL <- suppressWarnings(loglikCopula(fitfin@estimate, udat, copulah))
     metodo.fin <- method.c
     h <- 0
     while(((inherits(fitfin, "try-error")==TRUE) || !is.finite(LL)) & h<nmetstima){
@@ -141,8 +141,11 @@ stima_cop <- function (m, nmarg = 3, copula = "frank", method.ma = c("empirical"
         }
         fitfin <- try(fitCopula(data = udat, copula = copulah,
             start = startco, method = metodo.c), silent = TRUE)
-        if((inherits(fitfin, "try-error")!=TRUE)) LL <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE)
-        metodo.fin <- metodo.c
+        if((inherits(fitfin, "try-error")!=TRUE)){
+            if(fitfin@estimate<=0) fitfin@estimate <- 0.000000001
+            LL <- suppressWarnings(loglikCopula(fitfin@estimate, udat, copulah))
+            metodo.fin <- metodo.c
+        }
     }
     hm <- 0
     while(((inherits(fitfin, "try-error")==TRUE) || !is.finite(LL)) & hm<nmetstima0){
@@ -157,14 +160,20 @@ stima_cop <- function (m, nmarg = 3, copula = "frank", method.ma = c("empirical"
         h <- 1
         fitfin <- try(fitCopula(data = udat, copula = copulah,
                 start = startco, method = metodo.c, optim.method=metodo.opt[h]), silent = TRUE)
-        if((inherits(fitfin, "try-error")!=TRUE)) LL <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE)
-        metodo.fin <- metodo.opt[h]
+        if((inherits(fitfin, "try-error")!=TRUE)){
+            if(fitfin@estimate<=0) fitfin@estimate <- 0.000000001
+            LL <- suppressWarnings(loglikCopula(fitfin@estimate, udat, copulah))
+            metodo.fin <- metodo.opt[h]
+        }
         while(((inherits(fitfin, "try-error")==TRUE)||!is.finite(LL)) & h<nmetopt){
             h <- h+1
             fitfin <- try(fitCopula(data = udat, copula = copulah,
                         start = startco, method = metodo.c, optim.method=metodo.opt[h]), silent = TRUE)
-            if((inherits(fitfin, "try-error")!=TRUE)) LL <- loglikCopula(fitfin@estimate, udat, copulah, hideWarnings=TRUE)
-            metodo.fin <- metodo.opt[h]
+            if((inherits(fitfin, "try-error")!=TRUE)){
+                if(fitfin@estimate<=0) fitfin@estimate <- 0.000000001
+                LL <- suppressWarnings(loglikCopula(fitfin@estimate, udat, copulah))
+                metodo.fin <- metodo.opt[h]
+            }
         }
     }
     if(((inherits(fitfin, "try-error")==TRUE) || !is.finite(LL))) {

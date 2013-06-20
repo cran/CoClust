@@ -80,7 +80,7 @@ writeout = 10, penalty = c("BICk", "AICk", "LL"), ...){
     o       <- order(R2, decreasing=TRUE);
     RV      <- cbind(righe[o], colonne[o], R2[o]); # vectorize R matrix; it containes row and col indexes
     # Steps 1. - 2.
-    loglik         <- double();
+    loglik         <- double(length=length(model));
     matrice.indici <- vector("list", length(dimset));
     names(matrice.indici) <- dimset
     h              <- 1;
@@ -165,11 +165,12 @@ writeout = 10, penalty = c("BICk", "AICk", "LL"), ...){
                     }
                 }
             }
+            # it decides the peermutation of the k-plets
             if(length(start3)==k){
-                matrice.indici3[i,1:k] <- start3
-                perm                   <- CoClust_perm(m, mindex = matrice.indici3[1:i,], nmarg = k, copula = copula, method.ma, method.c, dfree)
+                matrice.indici3[i,1:k]  <- start3
+                perm                    <- CoClust_perm(m, mindex = matrice.indici3[1:i,], nmarg = k, copula = copula, method.ma, method.c, dfree)
                 if(class(perm)!="try-error"){
-                    matrice.indici3[i,]    <- perm[[2]][i,];
+                    matrice.indici3[i,] <- perm[[2]][i,];
                     # rule for allocating or discarding the created k-pla
                     mm <- matrice.indici3[1:i,1:k]
                     if(length(which(mm!=0))==0){
@@ -194,7 +195,9 @@ writeout = 10, penalty = c("BICk", "AICk", "LL"), ...){
                     i                   <- i-1;
                 }
             }
-            if(is.matrix(m2) && nrow(m2)<k){
+            # it updates the matrix of the remaining observations
+#*********************************************************************
+            if(!is.null(nrow(m2)) && nrow(m2)>0 && nrow(m2)<k){
                 matrice.indici3 <- matrice.indici3[1:length(which(matrice.indici3[,(k+1)]!=0)),]
                 i               <- floor(noc)+1;
                 save.RV2[[h]]   <- RV2;
@@ -219,6 +222,7 @@ writeout = 10, penalty = c("BICk", "AICk", "LL"), ...){
                     save.RV2[[h]]   <- RV2;
                 }
             }
+#****************************************************************
         }
         save.RV2[[h]] <- RV2;
         if(is.vector(matrice.indici3)){
@@ -236,158 +240,171 @@ writeout = 10, penalty = c("BICk", "AICk", "LL"), ...){
     index.matrix1 <- matrice.indici[[which.min(loglik)]];
     cat("\r Number of clusters selected: ", nmarg, "\n");
     # Steps 3. - 4.
-    RV2    <- save.RV2[[which.min(loglik)]];
-    if(is.matrix(index.matrix1)){
-        nr <- nrow(index.matrix1);
-    }else{
-        nr            <- 1
-        index.matrix1 <- as.matrix(t(index.matrix1));
+    RV2 <- save.RV2[[which.min(loglik)]];
+    ind <- matrix(FALSE, nrow(RV2), 2)
+    for(i in 1:nrow(index.matrix1)){
+        for(j in 1:nmarg){
+            dum <- RV2[,1:2] == index.matrix1[i,j]
+            ind <- ind | dum;
+        }
     }
-    if(is.matrix(RV2)){
-        nrRV2 <- (length(unique(c(unique(RV2[,1]),unique(RV2[,2]))))/nmarg)
-    }else{
-        nrRV2 <- (2/nmarg)
-    }
-    nocmax <- nr+nrRV2
-    permok <- permok.k[[which.min(loglik)]];
-    cat("\r Allocated observations: ", nr, "\n");
-    if(nocmax>nr){
-        index.matrix        <- matrix(0, nocmax, (nmarg+1), byrow=TRUE)
-        index.matrix[1:nr,] <- index.matrix1
-        ind                 <- matrix(FALSE, nrRV2, 2)
-#        if(is.vector(RV2)==FALSE && length(unique(c(unique(RV2[,1]),unique(RV2[,2]))))>=nmarg){
-        i <- 0
-        while(i<=nocmax){
-            i <- i+1
-            if(is.vector(RV2)==FALSE && length(unique(c(unique(RV2[,1]),unique(RV2[,2]))))>=nmarg){
-                mm <- index.matrix[1:(i-1),1:nmarg]
-                if(length(which(mm!=0))==0){
-                    m2 <- m
-                }else{
-                    m2 <- m[-mm,]
-                }
-                if(is.matrix(m2) && nrow(m2)>=nmarg){
-                    if(is.null(dim(RV2))){
-                        start3 <- RV2[1:2];
-                    }else{
-                        start3 <- RV2[1,1:2];
-                    }
-                    if(nmarg>=3){
-                        RV2  <- RV2[-1,]
-                        cand <- NULL
-                        aa   <- NULL
-                        for(j in 1:2){
-                            aa <- which(RV2==start3[j],arr.ind=TRUE)
-                            if(is.matrix(aa)){
-                                candrow   <- aa[which.min(aa[,1]),1];
-                                if(aa[which.min(aa[,1]),2]==2){
-                                    cand1 <- c(RV2[candrow,2],RV2[candrow,1],RV2[candrow,3]);
-                                }else{
-                                    cand1 <- RV2[candrow,];
-                                }
-                            }else{
-                                if(aa[2]==2){
-                                    cand1 <- c(RV2[aa,2],RV2[aa,1],RV2[aa,3]);
-                                }else{
-                                    cand1 <- RV2[aa,];
-                                }
-                            }
-                            cand <- rbind(cand,cand1);
-                        }
-                        start3   <- c(start3, cand[which.max(cand[,3]),2])
-                        if(nmarg>=4){
-                            for(n in 4:nmarg){
-                                cand <- NULL
-                                aa   <-NULL
-                                p    <- 1:(n-1)
-                                for(j in p){
-                                    pp <- setdiff(p,j)
-                                    cc <- which(RV2==start3[pp[1]],arr.ind=TRUE)[,1];
-                                    for(l in 2:length(pp)){
-                                        cc <- c(cc,which(RV2==start3[pp[l]],arr.ind=TRUE)[,1]);
-                                    }
-                                    a <- RV2[-cc,]
-                                    if(is.vector(a)){
-                                        if(which(a==start3[j])==2){
-                                            cand1 <- c(a[2],a[1],a[3]);
-                                        }else{
-                                            cand1 <- a;
-                                        }
-                                    }else{
-                                        aa <- which(a==start3[j],arr.ind=TRUE);
-                                        if(is.matrix(aa)){
-                                            candrow   <- aa[which.min(aa[,1]),1];
-                                            if(aa[which.min(aa[,1]),2]==2){
-                                                cand1 <- c(a[candrow,2],a[candrow,1],a[candrow,3]);
-                                            }else{
-                                                cand1 <- a[candrow,];
-                                            }
-                                        }else{
-                                            if(aa[2]==2){
-                                                cand1 <- c(a[aa,2],a[aa,1],a[aa,3]);
-                                            }else{
-                                                cand1 <- a[aa,];
-                                            }
-                                        }
-                                    }
-                                    cand <- rbind(cand,cand1);
-                                }
-                                start3 <- c(start3, cand[which.max(cand[,3]),2]);
-                            }
-                        }
-                    }
-                    if(length(start3)==nmarg){
-                        index.matrix[(nr+i),1:nmarg] <- start3
-                        perm                         <- CoClust_perm(m, mindex = index.matrix[1:(nr+i),], nmarg = nmarg, copula = copula, method.ma,
-                        method.c,dfree)
-                        mm <- index.matrix[1:(nr+i),1:nmarg]
+    ind2 <- which(!apply(ind, MARGIN = 1, FUN = any))
+    RV2 <- RV2[ind2,]
+    if(noc*nmarg<nrow(m)){
+        #if(is.matrix(save.RV2) && length(save.RV2)!=0){
+            if(is.matrix(index.matrix1)){
+                nr <- nrow(index.matrix1);
+            }else{
+                nr            <- 1
+                index.matrix1 <- as.matrix(t(index.matrix1));
+            }
+            if(is.matrix(RV2)){
+                nrRV2 <- (length(unique(c(unique(RV2[,1]),unique(RV2[,2]))))/nmarg)
+            }else{
+                nrRV2 <- (2/nmarg)
+            }
+            nocmax <- nr+nrRV2
+            permok <- permok.k[[which.min(loglik)]];
+            cat("\r Allocated observations: ", nr, "\n");
+            if(nocmax>nr){
+                index.matrix        <- matrix(0, nocmax, (nmarg+1), byrow=TRUE)
+                index.matrix[1:nr,] <- index.matrix1
+                ind                 <- matrix(FALSE, nrRV2, 2)
+        #        if(is.vector(RV2)==FALSE && length(unique(c(unique(RV2[,1]),unique(RV2[,2]))))>=nmarg){
+                i <- 0
+                while(i<=nocmax){
+                    i <- i+1
+                    if(is.vector(RV2)==FALSE && length(unique(c(unique(RV2[,1]),unique(RV2[,2]))))>=nmarg){
+                        mm <- index.matrix[1:(i-1),1:nmarg]
                         if(length(which(mm!=0))==0){
                             m2 <- m
                         }else{
                             m2 <- m[-mm,]
                         }
-                        if((class(perm)=="try-error")||(perm[[5]] < index.matrix[(nr+i-1),(nmarg+1)])){
-                            index.matrix[(nr+i), ] <- rep(0, (nmarg+1))
-                            perm                   <- permok
-                            i                      <- i-1;
-                        }else{
-                            index.matrix[(nr+i),]        <- perm[[2]][(nr+i),];
-                            permok <- perm;
-                            if((nr+i)%%writeout==0) cat("\r Allocated observations: ", (nr+i), "\n");
-                        }
-                    }else{
-                        permok     <- perm;
-                        if((nr+i)%%writeout==0) cat("\r Allocated observations: ", (nr+i), "\n");
-                    }
-                    if(is.matrix(m2) && nrow(m2)<nmarg){
-                        index.matrix <- index.matrix[1:length(which(index.matrix[,(nmarg+1)]!=0)),]
-                        i               <- floor(nocmax)+1;
-                    }else{
-                        if(!is.null(dim(RV2)) & length(start3)==nmarg){
-                            ind <- matrix(FALSE, nrow(RV2), 2)
-                            for(j in 1:nmarg){
-                                dum <- RV2[, 1:2] == start3[j]
-                                ind <- ind | dum;
+                        if(!is.null(nrow(m2)) && is.matrix(m2) && nrow(m2)>=nmarg){
+                            if(is.null(dim(RV2))){
+                                start3 <- RV2[1:2];
+                            }else{
+                                start3 <- RV2[1,1:2];
                             }
-                            ind2 <- which(!apply(ind, MARGIN = 1, FUN = any))
-                            if(length(ind2)>0){
-                                RV2 <- RV2[ind2, ]
-                                if(is.vector(RV2) & nmarg!=2){
+                            if(nmarg>=3){
+                                RV2  <- RV2[-1,]
+                                cand <- NULL
+                                aa   <- NULL
+                                for(j in 1:2){
+                                    aa <- which(RV2==start3[j],arr.ind=TRUE)
+                                    if(is.matrix(aa)){
+                                        candrow   <- aa[which.min(aa[,1]),1];
+                                        if(aa[which.min(aa[,1]),2]==2){
+                                            cand1 <- c(RV2[candrow,2],RV2[candrow,1],RV2[candrow,3]);
+                                        }else{
+                                            cand1 <- RV2[candrow,];
+                                        }
+                                    }else{
+                                        if(aa[2]==2){
+                                            cand1 <- c(RV2[aa,2],RV2[aa,1],RV2[aa,3]);
+                                        }else{
+                                            cand1 <- RV2[aa,];
+                                        }
+                                    }
+                                    cand <- rbind(cand,cand1);
+                                }
+                                start3   <- c(start3, cand[which.max(cand[,3]),2])
+                                if(nmarg>=4){
+                                    for(n in 4:nmarg){
+                                        cand <- NULL
+                                        aa   <-NULL
+                                        p    <- 1:(n-1)
+                                        for(j in p){
+                                            pp <- setdiff(p,j)
+                                            cc <- which(RV2==start3[pp[1]],arr.ind=TRUE)[,1];
+                                            for(l in 2:length(pp)){
+                                                cc <- c(cc,which(RV2==start3[pp[l]],arr.ind=TRUE)[,1]);
+                                            }
+                                            a <- RV2[-cc,]
+                                            if(is.vector(a)){
+                                                if(which(a==start3[j])==2){
+                                                    cand1 <- c(a[2],a[1],a[3]);
+                                                }else{
+                                                    cand1 <- a;
+                                                }
+                                            }else{
+                                                aa <- which(a==start3[j],arr.ind=TRUE);
+                                                if(is.matrix(aa)){
+                                                    candrow   <- aa[which.min(aa[,1]),1];
+                                                    if(aa[which.min(aa[,1]),2]==2){
+                                                        cand1 <- c(a[candrow,2],a[candrow,1],a[candrow,3]);
+                                                    }else{
+                                                        cand1 <- a[candrow,];
+                                                    }
+                                                }else{
+                                                    if(aa[2]==2){
+                                                        cand1 <- c(a[aa,2],a[aa,1],a[aa,3]);
+                                                    }else{
+                                                        cand1 <- a[aa,];
+                                                    }
+                                                }
+                                            }
+                                            cand <- rbind(cand,cand1);
+                                        }
+                                        start3 <- c(start3, cand[which.max(cand[,3]),2]);
+                                    }
+                                }
+                            }
+                            if(length(start3)==nmarg){
+                                index.matrix[(nr+i),1:nmarg] <- start3
+                                perm                         <- CoClust_perm(m, mindex = index.matrix[1:(nr+i),], nmarg = nmarg, copula = copula, method.ma,
+                                method.c,dfree)
+                                mm <- index.matrix[1:(nr+i),1:nmarg]
+                                if(length(which(mm!=0))==0){
+                                    m2 <- m
+                                }else{
+                                    m2 <- m[-mm,]
+                                }
+                                if((class(perm)=="try-error")||(perm[[5]] < index.matrix[(nr+i-1),(nmarg+1)])){
+                                    index.matrix[(nr+i), ] <- rep(0, (nmarg+1))
+                                    perm                   <- permok
+                                    i                      <- i-1;
+                                }else{
+                                    index.matrix[(nr+i),]        <- perm[[2]][(nr+i),];
+                                    permok <- perm;
+                                    if((nr+i)%%writeout==0) cat("\r Allocated observations: ", (nr+i), "\n");
+                                }
+                            }else{
+                                permok     <- perm;
+                                if((nr+i)%%writeout==0) cat("\r Allocated observations: ", (nr+i), "\n");
+                            }
+                            if(!is.null(nrow(m2)) && is.matrix(m2) && nrow(m2)<nmarg){
+                                index.matrix <- index.matrix[1:length(which(index.matrix[,(nmarg+1)]!=0)),]
+                                i               <- floor(nocmax)+1;
+                            }else{
+                                if(!is.null(dim(RV2)) & length(start3)==nmarg){
+                                    ind <- matrix(FALSE, nrow(RV2), 2)
+                                    for(j in 1:nmarg){
+                                        dum <- RV2[, 1:2] == start3[j]
+                                        ind <- ind | dum;
+                                    }
+                                    ind2 <- which(!apply(ind, MARGIN = 1, FUN = any))
+                                    if(length(ind2)>0){
+                                        RV2 <- RV2[ind2, ]
+                                        if(is.vector(RV2) & nmarg!=2){
+                                            index.matrix <- index.matrix[1:length(which(index.matrix[,(nmarg+1)]!=0)),]
+                                            i            <- floor(nocmax)+1;
+                                        }
+                                    }else{
+                                        index.matrix <- index.matrix[1:length(which(index.matrix[,(nmarg+1)]!=0)),]
+                                        i            <- floor(nocmax)+1;
+                                    }
+                                }else{
                                     index.matrix <- index.matrix[1:length(which(index.matrix[,(nmarg+1)]!=0)),]
                                     i            <- floor(nocmax)+1;
                                 }
-                            }else{
-                                index.matrix <- index.matrix[1:length(which(index.matrix[,(nmarg+1)]!=0)),]
-                                i            <- floor(nocmax)+1;
                             }
-                        }else{
-                            index.matrix <- index.matrix[1:length(which(index.matrix[,(nmarg+1)]!=0)),]
-                            i            <- floor(nocmax)+1;
                         }
                     }
                 }
             }
-        }
+        #}
     }
     fin <- permok;
     #
