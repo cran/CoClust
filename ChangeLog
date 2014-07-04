@@ -1,22 +1,33 @@
+0.3-0
+   - cleaned and optimized the internal functions;
+   - the selection of the k-plets now uses the pairwise Spearman's rho
+    together with a combination function fun which is now user defined (used to be the max function)
+
 0.2-9
-   - added a control on the dimension of the matrix of observations to be allocated (m2) 
+   - added a control on the dimension of the matrix of observations to be allocated (m2)
    - added a control on the row index matrix of observations to be allocated (RV2) post selection of the number of clusters.
+
 0.2-8
-   - elimintaed the hideWarnings in the loglikCopula function because it deprecated and no 
+   - elimintaed the hideWarnings in the loglikCopula function because it deprecated and no
 	longer used; the warning messages are now suppressed by suppressWarnings(.).
+
 0.2-7
    - made the package compliant with the changes in version 0.999-0 of the copula package.
+
 0.2-6
    - fixed one buglet
    - fixed one incompatibility on rgamma with the latest R-devel version in the example.
+
 0.2-5
    - eliminated the double computation (before and after the choice of K) of the first part of the classification (on which K is
 	chosen) and modified part of the code accordingly.
    - added a control on the dimension of matrice.indici3 and index.matrix.
    - added the slot Dependence to the output. It contains information on the fitted copula model.
+
 0.2-4
    - added a check on the possibility of forming a new k-plet candidate to the allocation by means of the remaining observations
 	at step i.
+
 0.2-3
     - added the check on the finiteness of the loglikelihood of the copula fit; modified several portions of the
         code accordingly.

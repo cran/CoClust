@@ -6,17 +6,17 @@
 Cluster analysis based on copula functions
 }
 \usage{
-CoClust(m, dimset = 2:5, noc = 4, copula = "frank", method.ma =
-  c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"),
-  dfree=NULL, writeout = 10, penalty = c("BICk", "AICk", "LL"), ...)
+CoClust(m, dimset = 2:5, noc = 4, copula = "frank", fun = median,
+  method.ma = c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"),
+   dfree = NULL, writeout = 5, penalty = c("BICk", "AICk", "LL"), ...)
 }
- %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{m}{a data matrix.}
   \item{dimset}{the set of dimensions for which the function tries the clustering.}
   \item{noc}{sample size of the set for selecting the number of clusters.}
   \item{copula}{a copula model.
         This should be one of "normal", "t", "frank", "clayton" and "gumbel". See the Details section.}
+  \item{fun}{combination function of the pairwise Spearman's rho used to select the k-plets. The default is \code{median}}
   \item{method.ma}{estimation method for margins. See the Details section.}
   \item{method.c}{estimation method for copula. See \code{\link{fitCopula}}.}
   \item{dfree}{degrees of freedom for the \emph{t} copula.}
@@ -27,22 +27,22 @@ CoClust(m, dimset = 2:5, noc = 4, copula = "frank", method.ma =
 \details{
 \describe{
 \item{Usage for Frank copula: }{
-\code{CoClust(m, nmaxmarg = 2:5, noc = 4, copula = "frank",
-method.ma=c("gaussian","empirical"), method.c = "mpl", penalty ="BICk", ...)}}
+\preformatted{CoClust(m, nmaxmarg = 2:5, noc = 4, copula = "frank",
+ fun = median, method.ma=c("gaussian","empirical"), method.c = "mpl",
+ penalty ="BICk", ...)}}
 }
 
 CoClust is a clustering algorithm that, being based on copula functions, allows to group observations according to the multivariate dependence structure of the generating process without any assumptions on the margins.
 
-For each \emph{k} in \code{dimset} the algorithm builds a sample of \code{noc} observations (rows of the data matrix \code{m}) by using the matrix of Spearman's rho  correlation coefficients.
+For each \emph{k} in \code{dimset} the algorithm builds a sample of \code{noc} observations (rows of the data matrix \code{m}) by using the matrix of Spearman's rho correlation coefficients which are combined by means of the function \code{fun} (\code{median} by default).
 The number of clusters \emph{K} is selected by means of a criterion based on the likelihood of the copula fit. The switch \code{penalty} allows to select 3 different criteria; The choice \code{LL} corresponds to using
 the likelihood without penalty terms. Then, the remaining observations are allocated to the clusters as follows:
-1. selects a \emph{K}-plet of observations on the basis of Spearman's rho; 2. allocates or discards the \emph{K}-plet on the basis of the likelihood of the copula fit.
+1. selects a \emph{K}-plet of observations on the basis of \code{fun} applied to the pairwise Spearman's rho; 2. allocates or discards the \emph{K}-plet on the basis of the likelihood of the copula fit.
 
 The estimation approach for the copula fit is semiparametric: a range of nonparametric margins and parametric copula models can be selected by the user.
 The CoClust algorithm does not require to set a priori the number of clusters nor it needs a starting classification.
 
 Notice that the dependence structure for the Gaussian and the \emph{t} copula is set to exchangeable. Non structured dependence structures will be allowed in a future version.
-
 }
  \value{An object of S4 class "CoClust", which is a list with the following elements:
     \item{Number.of.Clusters}{the number \emph{K} of identified clusters.}
@@ -63,16 +63,18 @@ Notice that the dependence structure for the Gaussian and the \emph{t} copula is
     \item{Index.dimset}{a list that, for each \emph{k} in \code{dimset}, contains the index matrix of the initial set of \code{nk} observations used for selecting the number of clusters, together with the associated loglikelihood.}
 }
 \note{
-The final clustering is composed of \emph{k} groups in which observations of the same group are independent whereas the observations that belong to different groups and that form a \emph{K}-plet are dependent.
+The final clustering is composed of \emph{K} groups in which observations of the same group are independent whereas the observations that belong to different groups and that form a \emph{K}-plet are dependent.
 }
  \references{
+Di Lascio, F.M.L. and Giannerini, S. (2014) "An Improved Copula-Based Clustering Algorithm", \emph{Working Paper}.
+
 Di Lascio, F.M.L. and Giannerini, S. (2012) "A Copula-Based Algorithm for Discovering Patterns of Dependent Observations", \emph{Journal of Classification}, Volume \bold{29}, Number 1, 50-75.
 
 Di Lascio, F.M.L. (2008). "Analyzing the dependence structure of microarray data: a copula-based approach". \emph{PhD thesis}, Dipartimento di Scienze Statistiche, Universita' di Bologna, Italy.
 }
 
 \author{
-Francesca Marta Lilja Di Lascio <francesca.dilascio@unibo.it>,
+Francesca Marta Lilja Di Lascio <marta.dilascio@unibz.it>,
 
 Simone Giannerini <simone.giannerini@unibo.it>}
 

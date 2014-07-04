@@ -12,11 +12,11 @@ citHeader("To cite the 'CoClust' package in publications use:")
            person(c("F.", "Marta", "L."), "Di Lascio", role = "aut"),
            person("Simone", "Giannerini", role = c("aut","cre"), email = "simone.giannerini@unibo.it")
          ),
-         year = "2012",
-         note = "R package version 0.2-2",
+         year = "2014",
+         note = "R package version 0.3-0",
          url = "http://CRAN.R-project.org/package=CoClust",
          key = "CoClust-package",
-         textVersion = "Di Lascio F.M.L. and Giannerini S. (2012) CoClust: copula based cluster analysis. R package version 0.2-2, <URL: http://CRAN.R-project.org/package=CoClust>."
+         textVersion = "Di Lascio F.M.L. and Giannerini S. (2014) CoClust: copula based cluster analysis. R package version 0.3-0, <URL: http://CRAN.R-project.org/package=CoClust>."
     )
 
     bibentry(

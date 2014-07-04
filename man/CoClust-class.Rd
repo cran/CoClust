@@ -32,12 +32,14 @@ Objects can be created by calls of the form \code{new("CoClust", ...)}.
 No methods defined with class "CoClust" in the signature.
 }
  \references{
+Di Lascio, F.M.L. and Giannerini, S. (2014) "An Improved Copula-Based Clustering Algorithm", \emph{Working Paper}.
+
 Di Lascio, F.M.L. and Giannerini, S. (2012) "A Copula-Based Algorithm for Discovering Patterns of Dependent Observations", \emph{Journal of Classification}, Volume \bold{29}, Number 1, 50-75.
 
 Di Lascio, F.M.L. (2008). "Analyzing the dependence structure of microarray data: a copula-based approach". \emph{PhD thesis}, Dipartimento di Scienze Statistiche, Universita' di Bologna, Italy.
 }
 
-\author{Francesca Marta Lilja Di Lascio <francesca.dilascio@unibo.it>,
+\author{Francesca Marta Lilja Di Lascio <marta.dilascio@unibz.it>,
 
 Simone Giannerini <simone.giannerini@unibo.it>}
 

@@ -1,7 +1,8 @@
 
-#import(methods)
 #importFrom(graphics, plot)
-#importFrom(methods, show)
+#importFrom(gtools, permutations)
+import(copula)
+import(methods)
 export(
 CoClust
 )
