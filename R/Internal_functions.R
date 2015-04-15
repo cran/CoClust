@@ -102,8 +102,8 @@ CoClust_perm <- function(m, mcand, copula = "frank", method.ma = c("empirical", 
 
 ## **************************************************************************************************
 
-stima_cop <- function (m, nmarg, copula = "frank", method.ma = c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"), dfree, ...){
-    # m ha i margini (variabili) in riga e le obs in colonna perchè così rischiesto da fit.margin
+stima_cop <- function (m, nmarg, copula = "frank", method.ma = c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"), dfree, dfix = TRUE, ...){
+    # m ha i margini (variabili) in riga e le obs in colonna perche' cosi' rischiesto da fit.margin
     method.ma <- match.arg(method.ma)
     n.row <- nrow(m)
     n.col <- ncol(m)
@@ -127,7 +127,7 @@ stima_cop <- function (m, nmarg, copula = "frank", method.ma = c("empirical", "p
         startco <- 0.5
     }else
     if (copula == "t") {
-        copulah <- tCopula(0.5, dim = nmarg, dispstr = "ex", df=dfree)
+        copulah <- tCopula(0.5, dim = nmarg, dispstr = "ex", df=dfree, df.fixed=dfix)
         startco <- c(0.5, dfree)
     }else
     if (copula == "frank") {

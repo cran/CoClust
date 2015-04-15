@@ -91,11 +91,11 @@ CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, meth
             if(!all(is.na(RS2)) & ((G-nselect)>=k)){                                         # check sul num di obs rimanenti, almeno k per formare una k-pla; sum=0 -> riga con tutti NA
                 cand          <- which(RS2==max(RS2,na.rm=TRUE), arr.ind=TRUE)[1,]           # indice di riga e colonna del candidato
                 RS2[cand,cand] <- NA
-                while(length(cand)<k){                                                       # fintanto che la k-pla non è completa
+                while(length(cand)<k){                                                       # fintanto che la k-pla non e' completa
                     aa        <- RS2[cand,]                                                  # matrice con in riga le oss cand
                     aa[,cand] <- NA
                     candk     <- unique(apply(aa,MARGIN=1,FUN=which.max))                    # sceglie i candidati per ogni riga (unique evita i duplicati)
-                    if(length(candk)==1){                                                    # se il candidato è unico lo sceglie in automatico
+                    if(length(candk)==1){                                                    # se il candidato e' unico lo sceglie in automatico
                         good <- candk
                     }else{
                         comb  <- expand.grid(cand,candk)                                     # combinaz a 2 a 2 delle oss selezionata e di quelle papabili
@@ -119,7 +119,7 @@ CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, meth
                 }else{
                     perm  <- CoClust_perm(matrix(t(m[c(mat.indici),]),ncol=k), mcand=mcand, copula = copula, method.ma, method.c, dfree) # it decides the permutation of the k-plets
                                                                                              # OUTPUT: matrice delle permutazioni di cand e relativa loglik
-                                                                                             # mcand non è incluso in mat.indici in input
+                                                                                             # mcand non e' incluso in mat.indici in input
                     if(class(perm)!="try-error"){
                         ll.cand <- perm$llgood                                               # loglik del blocco compreso la cand con la migliore permutazione!
                         if(ll.cand>ll.indici[i-1]){
@@ -178,7 +178,7 @@ CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, meth
                     aa        <- RS2[cand,]                                                    # matrice con in riga le oss cand
                     aa[,cand] <- NA
                     candK     <- unique(apply(aa,MARGIN=1,FUN=which.max))
-                    if(length(candK)==1){                                                      # se il candidato è unico lo sceglie in automatico
+                    if(length(candK)==1){                                                      # se il candidato e' unico lo sceglie in automatico
                         good <- candK
                     }else{
                         comb  <- expand.grid(cand,candK)                                       # combinaz a 2 a 2 delle oss selezionata e di quelle papabili
@@ -221,7 +221,7 @@ CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, meth
         indici.dimset <- vector("list", length(dimset));
         indici.dimset[[1]] <- cbind(mat.indici.k[[1]],LogLik=unlist(ll.indici.start.k))
     }else{
-        indici.dimset      <- mapply(mat.indici.k, LogLik=ll.indici.start.k, FUN=cbind);
+        indici.dimset      <- Map(mat.indici.k, LogLik=ll.indici.start.k, f=cbind);
     }
     names(indici.dimset)   <- dimset;
     names(loglik.k)        <- dimset;

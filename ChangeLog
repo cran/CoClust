@@ -1,14 +1,19 @@
+0.3-1
+   - replaced the function mapply with its wrapper Map.
+   - added the parameter dfix to the internal fucntion stima_cop
+    it sets the parameter df.fixed=TRUE in tCopula
+
 0.3-0
    - cleaned and optimized the internal functions;
    - the selection of the k-plets now uses the pairwise Spearman's rho
-    together with a combination function fun which is now user defined (used to be the max function)
+    together with a combination function fun which is now user defined (used to be the max function).
 
 0.2-9
    - added a control on the dimension of the matrix of observations to be allocated (m2)
    - added a control on the row index matrix of observations to be allocated (RV2) post selection of the number of clusters.
 
 0.2-8
-   - elimintaed the hideWarnings in the loglikCopula function because it deprecated and no
+   - eliminated the hideWarnings in the loglikCopula function because it deprecated and no
 	longer used; the warning messages are now suppressed by suppressWarnings(.).
 
 0.2-7

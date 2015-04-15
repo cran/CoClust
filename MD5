@@ -1,8 +1,8 @@
-712abd5ca1601248f89dceaa4112ebe0 *ChangeLog
-b479de01fab63cd077f254c275fb38aa *DESCRIPTION
+4ac39fe206f108b2d0be0e2eab34e29a *ChangeLog
+4a54d395d683448873396a690f6689d1 *DESCRIPTION
 beb41e3882d6ab7a29858a5dad555172 *NAMESPACE
-0b890e25dec38a8e4cdafece3a1e6c5b *R/CoClust.R
-70fd2d370dcd2facf469005811ebdf12 *R/Internal_functions.R
-8f4cbade2f2c0504304f573d98e2b272 *inst/CITATION
+fdb5a5d96c09e0d4da491b933b1b385c *R/CoClust.R
+595553c21d72152721afb7fba3d3cb26 *R/Internal_functions.R
+42500cd28e69e6b04dfa1e195c793643 *inst/CITATION
 bf8feb7b41e58c7f6fc8682d61212c97 *man/CoClust-class.Rd
 90c066468c1dc83b5f2ff9885657ecbb *man/CoClust.Rd
