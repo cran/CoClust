@@ -66,9 +66,15 @@ Notice that the dependence structure for the Gaussian and the \emph{t} copula is
 The final clustering is composed of \emph{K} groups in which observations of the same group are independent whereas the observations that belong to different groups and that form a \emph{K}-plet are dependent.
 }
  \references{
-Di Lascio, F.M.L. and Giannerini, S. (2014) "An Improved Copula-Based Clustering Algorithm", \emph{Working Paper}.
+Di Lascio, F.M.L. (201x). "CoClust: An R Package for Copula-based Cluster Analysis". To be submitted.
 
-Di Lascio, F.M.L. and Giannerini, S. (2012) "A Copula-Based Algorithm for Discovering Patterns of Dependent Observations", \emph{Journal of Classification}, Volume \bold{29}, Number 1, 50-75.
+Di Lascio, F.M.L., Durante, F. and Pappada', R. (2017). "Copula-based clustering methods", Copulas and Dependence Models with Applications, p.49-67. Eds Ubeda-Flores, M., de Amo, E., Durante, F. and Fernandez Sanchez, J., Springer International Publishing. ISBN: 978-3-319-64220-8.
+ 
+Di Lascio, F.M.L. and Disegna, M. (2017). "A copula-based clustering algorithm to analyse EU country diets". \emph{Knowledge-Based Systems}, 132, p.72-84. DOI: 10.1016/j.knosys.2017.06.004.
+
+Di Lascio, F.M.L. and Giannerini, S. (2016). "Clustering dependent observations with copula functions". \emph{Statistical Papers}, p.1-17. DOI 10.1007/s00362-016-0822-3.
+
+Di Lascio, F.M.L. and Giannerini, S. (2012). "A Copula-Based Algorithm for Discovering Patterns of Dependent Observations", \emph{Journal of Classification}, 29(1), p.50-75.
 
 Di Lascio, F.M.L. (2008). "Analyzing the dependence structure of microarray data: a copula-based approach". \emph{PhD thesis}, Dipartimento di Scienze Statistiche, Universita' di Bologna, Italy.
 }

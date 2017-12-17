@@ -52,7 +52,7 @@ setClass("CoClust",
 ## ***************************************************************************************************
 
 CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, method.ma = c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"), dfree = NULL,
-                    writeout = 5, penalty = c("BICk", "AICk", "LL"), ...){ # penalty is used to select K (K.f)
+                    writeout = 5, penalty = c("BICk", "AICk", "LL"), ...){ # penalty is used to select K (K.f), BICk default
     #
     method.ma <- match.arg(method.ma)
     method.c  <- match.arg(method.c)

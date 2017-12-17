@@ -27,7 +27,7 @@
 
 ## **************************************************************************************************
 
-fit.margin <- function(dataset, param=list(dimc=NULL)){
+fit.margin <- function(dataset, param=list(dimc=NULL)){ # empirical obs
     dimc <- param$dimc
     udath <- matrix(0, nrow=ncol(dataset), ncol=dimc)
     ecdfc <- function(x){
@@ -51,7 +51,7 @@ fit.margin <- function(dataset, param=list(dimc=NULL)){
 }
 ## **************************************************************************************************
 
-fit.margin2 <- function(dataset, param = list(dimc = NULL)) {
+fit.margin2 <- function(dataset, param = list(dimc = NULL)) { # pseudo obs
     n     <- ncol(dataset)
     udath <- apply(t(dataset), 2, rank)/(n + 1)
     return(udath)

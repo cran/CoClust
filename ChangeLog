@@ -1,6 +1,11 @@
+0.3-2
+   - updated references
+   - added importFrom("stats", "approxfun", "cor", "median", "optim", "pnorm","sd") in the NAMESPACE file
+   - changed maintainer
+
 0.3-1
    - replaced the function mapply with its wrapper Map.
-   - added the parameter dfix to the internal fucntion stima_cop
+   - added the parameter dfix to the internal function stima_cop
     it sets the parameter df.fixed=TRUE in tCopula
 
 0.3-0
@@ -13,7 +18,7 @@
    - added a control on the row index matrix of observations to be allocated (RV2) post selection of the number of clusters.
 
 0.2-8
-   - eliminated the hideWarnings in the loglikCopula function because it deprecated and no
+   - elimintaed the hideWarnings in the loglikCopula function because it deprecated and no
 	longer used; the warning messages are now suppressed by suppressWarnings(.).
 
 0.2-7

@@ -3,6 +3,7 @@
 #importFrom(gtools, permutations)
 import(copula)
 import(methods)
+importFrom("stats", "approxfun", "cor", "median", "optim", "pnorm","sd")
 export(
 CoClust
 )
