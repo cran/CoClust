@@ -1,14 +1,22 @@
 Package: CoClust
-Title: Copula Based Cluster Analysis
-Date: 2017-12-15
-Version: 0.3-2
-Author: Francesca Marta Lilja Di Lascio, Simone Giannerini
+Title: A Copula-Based Clustering Algorithm
+Date: 2025-04-11
+Version: 1.0-0
+Authors@R: c(person(given = c("Francesca", "Marta", "Lilja", "Di"),
+                  family = "Lascio",
+                  role = c("aut", "cre"),
+                  email = "marta.dilascio@unibz.it"),
+           person(given = "Simone",
+                  family = "Giannerini",
+                  role = "aut"))
+Author: Francesca Marta Lilja Di Lascio [aut, cre],
+  Simone Giannerini [aut]
 Depends: R (>= 2.15.1), methods, copula
 Imports: gtools
-Description: A copula based clustering algorithm that finds clusters according to the complex multivariate dependence structure of the data generating process. The updated version of the algorithm is described in Di Lascio, F.M.L. and Giannerini, S. (2016). "Clustering dependent observations with copula functions". Statistical Papers, p.1-17. <doi:10.1007/s00362-016-0822-3>.
+Description: A copula based clustering algorithm that finds clusters according to the complex multivariate dependence structure of the data generating process. The updated version of the algorithm is described in Di Lascio, F.M.L. and Giannerini, S. (2019). "Clustering dependent observations with copula functions". Statistical Papers, 60, p.35-51. <doi:10.1007/s00362-016-0822-3>.
 Maintainer: Francesca Marta Lilja Di Lascio <marta.dilascio@unibz.it>
 License: GPL (>= 2)
-Packaged: 2017-12-15 18:40:48 UTC; FDiLascio
+Packaged: 2025-04-11 11:04:39 UTC; FDiLascio
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2017-12-17 16:14:20 UTC
+Date/Publication: 2025-04-11 11:20:09 UTC

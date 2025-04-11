@@ -51,7 +51,7 @@ setClass("CoClust",
          )
 ## ***************************************************************************************************
 
-CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, method.ma = c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"), dfree = NULL,
+CoClust <- function(m, dimset = 2:50, noc = 4, copula = "frank", fun=median, method.ma = c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"), dfree = NULL,
                     writeout = 5, penalty = c("BICk", "AICk", "LL"), ...){ # penalty is used to select K (K.f), BICk default
     #
     method.ma <- match.arg(method.ma)
@@ -65,15 +65,15 @@ CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, meth
         stop("noc * max(dimset) should be smaller than the number of observations");
     if(noc < 1)
         stop("noc must be greater than 1");
-    if((min(dimset) < 2)|(max(dimset)> 10))
-        stop("dimset must range from 2 to 10");
+    if((min(dimset) < 2)|(max(dimset)> 50))
+        stop("dimset must range from 2 to 50");
     if(copula == "t" & is.null(dfree))
             warning("dfree should be specified only when the copula is a tcopula")
     #
     model    <- copula;
     RS       <- abs(cor(t(m),method="spearman"));
     diag(RS) <- NA
-    colnames(RS) <- 1:G ############# SERVIONO QUESTE DUE LINEE DI COMANDO????
+    colnames(RS) <- 1:G 
     rownames(RS) <- 1:G
     # Steps 1. - 2.
     loglik.k            <- double(length=length(dimset));                                    # information criterion by varying k
@@ -110,7 +110,8 @@ CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, meth
                 mcand <- matrix(t(m[cand,]),ncol=k)                                          # k-pla di dati (matrice) candidata all'allocazione
                 if(i==1){
                     perm <- stima_cop(t(mcand), nmarg=k, copula=copula, method.ma, method.c, dfree)
-                    if(class(perm)!="try-error"){
+                    if(inherits(perm, "try-error")==FALSE){
+                    #if(class(perm)!="try-error"){
                         ll.cand        <- perm$LogLik                                        # loglik del blocco compreso la cand con la migliore permutazione!
                         ll.indici[i]   <- ll.cand
                         mat.indici[i,] <- cand
@@ -120,7 +121,8 @@ CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, meth
                     perm  <- CoClust_perm(matrix(t(m[c(mat.indici),]),ncol=k), mcand=mcand, copula = copula, method.ma, method.c, dfree) # it decides the permutation of the k-plets
                                                                                              # OUTPUT: matrice delle permutazioni di cand e relativa loglik
                                                                                              # mcand non e' incluso in mat.indici in input
-                    if(class(perm)!="try-error"){
+                    if(inherits(perm, "try-error")==FALSE){
+                    #if(class(perm)!="try-error"){
                         ll.cand <- perm$llgood                                               # loglik del blocco compreso la cand con la migliore permutazione!
                         if(ll.cand>ll.indici[i-1]){
                             ll.indici[i]   <- ll.cand
@@ -192,7 +194,8 @@ CoClust <- function(m, dimset = 2:5, noc = 4, copula = "frank", fun=median, meth
                 }# end while
                 mcand <- matrix(t(m[cand,]),ncol=K.f)                                          # k-pla di dati (matrice) candidata all'allocazione
                 perm  <- CoClust_perm(matrix(t(m[c(mat.indici.fin),]),ncol=K.f), mcand=mcand, copula = copula, method.ma, method.c, dfree)
-                if(class(perm)!="try-error"){
+                if(inherits(perm, "try-error")==FALSE){
+                #if(class(perm)!="try-error"){
                     ll.cand <- perm$llgood                                                     # loglik delle obs allocate E della cand con la migliore permutazione
                     if(ll.cand>ll.indici.fin[i-1]){
                         if(i%%writeout==0) cat("\r Allocated observations: ", i, "\n");

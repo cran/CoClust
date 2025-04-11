@@ -1,12 +1,12 @@
 \name{CoClust}
 \alias{CoClust}
 %- Also NEED an '\alias' for EACH other topic documented here.
-\title{Copula-Based Clustering Algorithm}
+\title{A copula-based clustering algorithm}
 \description{
 Cluster analysis based on copula functions
 }
 \usage{
-CoClust(m, dimset = 2:5, noc = 4, copula = "frank", fun = median,
+CoClust(m, dimset = 2:50, noc = 4, copula = "frank", fun = median,
   method.ma = c("empirical", "pseudo"), method.c = c("ml", "mpl", "irho", "itau"),
    dfree = NULL, writeout = 5, penalty = c("BICk", "AICk", "LL"), ...)
 }
@@ -18,16 +18,16 @@ CoClust(m, dimset = 2:5, noc = 4, copula = "frank", fun = median,
         This should be one of "normal", "t", "frank", "clayton" and "gumbel". See the Details section.}
   \item{fun}{combination function of the pairwise Spearman's rho used to select the k-plets. The default is \code{median}}
   \item{method.ma}{estimation method for margins. See the Details section.}
-  \item{method.c}{estimation method for copula. See \code{\link{fitCopula}}.}
+  \item{method.c}{estimation method for copula. See \code{\link[copula]{fitCopula}}.}
   \item{dfree}{degrees of freedom for the \emph{t} copula.}
   \item{writeout}{writes a message on the number of allocated observations every writeout observations.}
   \item{penalty}{Specifies the likelihood criterion used for selecting the number of clusters.}
-  \item{\dots}{further parameters for \code{\link{fitCopula}}.}
+  \item{\dots}{further parameters for \code{\link[copula]{fitCopula}}.}
 }
 \details{
 \describe{
 \item{Usage for Frank copula: }{
-\preformatted{CoClust(m, nmaxmarg = 2:5, noc = 4, copula = "frank",
+\preformatted{CoClust(m, nmaxmarg = 2:50, noc = 4, copula = "frank",
  fun = median, method.ma=c("gaussian","empirical"), method.c = "mpl",
  penalty ="BICk", ...)}}
 }
@@ -66,12 +66,12 @@ Notice that the dependence structure for the Gaussian and the \emph{t} copula is
 The final clustering is composed of \emph{K} groups in which observations of the same group are independent whereas the observations that belong to different groups and that form a \emph{K}-plet are dependent.
 }
  \references{
-Di Lascio, F.M.L. (201x). "CoClust: An R Package for Copula-based Cluster Analysis". To be submitted.
+Di Lascio, F.M.L. and Giannerini, S. (2019). "Clustering dependent observations with copula functions". \emph{Statistical Papers}, 60, p.35-51. DOI 10.1007/s00362-016-0822-3.
 
-Di Lascio, F.M.L., Durante, F. and Pappada', R. (2017). "Copula-based clustering methods", Copulas and Dependence Models with Applications, p.49-67. Eds Ubeda-Flores, M., de Amo, E., Durante, F. and Fernandez Sanchez, J., Springer International Publishing. ISBN: 978-3-319-64220-8.
+Di Lascio, F.M.L. (2018) "CoClust: An R Package for Copula-based Cluster Analysis", Recent Applications in Data Clustering, p.93-114. Ed. Harun Pirim, IntTech Publisher. ISBN 978-1-78923-527-2. DOI 10.5772/intechopen.74865.
+
+Di Lascio, F.M.L., Durante, F. and Pappada', R. (2017). "Copula-based clustering methods", Copulas and Dependence Models with Applications, p.49-67. Eds Ubeda-Flores, M., de Amo, E., Durante, F. and Fernandez Sanchez, J., Springer International Publishing. ISBN 978-3-319-64220-8.
  
-Di Lascio, F.M.L. and Disegna, M. (2017). "A copula-based clustering algorithm to analyse EU country diets". \emph{Knowledge-Based Systems}, 132, p.72-84. DOI: 10.1016/j.knosys.2017.06.004.
-
 Di Lascio, F.M.L. and Giannerini, S. (2016). "Clustering dependent observations with copula functions". \emph{Statistical Papers}, p.1-17. DOI 10.1007/s00362-016-0822-3.
 
 Di Lascio, F.M.L. and Giannerini, S. (2012). "A Copula-Based Algorithm for Discovering Patterns of Dependent Observations", \emph{Journal of Classification}, 29(1), p.50-75.
@@ -129,6 +129,7 @@ index.clust <- clust@"Index.Matrix"
 index.clust
 index.true
 ##
+
 }
  % Add one or more standard keywords, see file 'KEYWORDS' in the % R documentation directory.
   \keyword{cluster}

@@ -1,10 +1,5 @@
 citHeader("To cite the 'CoClust' package in publications use:")
 
-#if(!exists("meta") || is.null(meta)) meta <- packageDescription("CoClust")
-#year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date)
-#vers <- paste("R package version", meta$Version)
-
-
     bibentry(
          bibtype = "Manual",
          title = "CoClust: copula based cluster analysis",
@@ -12,14 +7,15 @@ citHeader("To cite the 'CoClust' package in publications use:")
            person(c("F.", "Marta", "L."), "Di Lascio", role = c("aut","cre"), email = "marta.dilascio@unibz.it"),
            person("Simone", "Giannerini", role = "aut")
          ),
-         year = "2017",
+         year = "2025",
          note = "R package version 0.3-2",
          url = "https://CRAN.R-project.org/package=CoClust",
          key = "CoClust-package",
-         textVersion = "Di Lascio F.M.L. and Giannerini S. (2017) CoClust: copula based cluster analysis. R package version 0.3-2, <URL: https://CRAN.R-project.org/package=CoClust>."
+         textVersion = "Di Lascio F.M.L. and Giannerini S. (2025) CoClust: copula based cluster analysis. R package version 1.0-0, <URL: https://CRAN.R-project.org/package=CoClust>."
     )
-
+    
 bref <- c(
+
     bibentry(
         bibtype = "Article",
         author = c(
@@ -39,25 +35,6 @@ bref <- c(
         year = "2012",
         key = "CoClust-article",
         textVersion = "Di Lascio F.M.L. and Giannerini S. (2012). A Copula-Based Algorithm for Discovering Patterns of Dependent Observations, Journal of Classification, Volume 29, Number 1, 50-75."
-    ),
-    
-        bibentry(
-        bibtype = "Article",
-        author = c(
-           person(c("F.", "Marta", "L."), "Di Lascio", role = c("aut","cre"), email = "marta.dilascio@unibz.it"),
-           person("Simone", "Giannerini", role = "aut")
-         ),
-        title = "Clustering dependent observations with copula functions",
-        journal = "Statistical Papers",
-        publisher = "Springer Berlin Heidelberg",
-        issn = "1613-9798",
-        keyword = "Mathematics and Statistics",
-        pages = "1-17",
-        url = "https://doi.org/10.1007/s00362-016-0822-3",
-        note = "10.1007/s00362-016-0822-3",
-        year = "2016",
-        key = "CoClust-article",
-        textVersion = "Di Lascio, F.M.L., and Giannerini, S. (2016). Clustering dependent observations with copula functions. Statistical Papers, p.1-17. DOI 10.1007/s00362-016-0822-3."
     ),
 
     bibentry(
@@ -95,20 +72,41 @@ bref <- c(
         isbn = "978-3-319-64220-8",
         keyword = "Mathematics and Statistics",
         pages = "49-67",
-        url = "http://www.springer.com/la/book/9783319642208",
         year = "2017",
         key = "CoClust-article",
         textVersion = "Di Lascio, F.M.L., Durante, F. and Pappada', R. (2017). Copula-based clustering methods, Copulas and Dependence Models with Applications, p.49-67. Eds Ubeda-Flores, M., de Amo, E., Durante, F. and Fernandez Sanchez, J., Springer international Publishing. ISBN: 978-3-319-64220-8."
     ),
-
+    
     bibentry(
         bibtype = "InBook",
         author = person(c("F.", "Marta", "L."), "Di Lascio", role = c("aut","cre"), email = "marta.dilascio@unibz.it"),
         title = "CoClust: An R Package for Copula-based Cluster Analysis",
+        pages = "93-114",
         chapter="x",
-        publisher = "x",
-        year = "201x",
+        publisher = "IntTech",
+        year = "2018",
+        isbn = "978-1-78923-527-2",
         key = "CoClust-article",
-        textVersion = "Di Lascio, F.M.L. (201x). CoClust: An R Package for Copula-based Cluster Analysis. To be submitted."
+        textVersion = "Di Lascio, F.M.L. (2018). CoClust: An R Package for Copula-based Cluster Analysis. To be submitted."
+    ),
+
+    bibentry(
+        bibtype = "Article",
+        author = c(
+           person(c("F.", "Marta", "L."), "Di Lascio", role = c("aut","cre"), email = "marta.dilascio@unibz.it"),
+           person("Simone", "Giannerini", role = "aut")
+         ),
+        title = "Clustering dependent observations with copula functions",
+        journal = "Statistical Papers",
+        publisher = "Springer Berlin Heidelberg",
+        issn = "1613-9798",
+        keyword = "Mathematics and Statistics",
+        volume = "60",
+        pages = "35-51",
+        url = "https://doi.org/10.1007/s00362-016-0822-3",
+        note = "10.1007/s00362-016-0822-3",
+        year = "2019",
+        key = "CoClust-article",
+        textVersion = "Di Lascio, F.M.L., and Giannerini, S. (2019). Clustering dependent observations with copula functions. Statistical Papers, 60, p.35-51. DOI 10.1007/s00362-016-0822-3."
     )
 )

@@ -89,7 +89,8 @@ CoClust_perm <- function(m, mcand, copula = "frank", method.ma = c("empirical", 
     for(i in 1:npermut){
         m.try <- rbind(m,mcand[,permut[i,]])
         fit.m <- stima_cop(t(m.try), nmarg=nmarg, copula=copula, method.ma, method.c, dfree)
-        if(class(fit.m)!="try-error"){
+        if(inherits(fit.m,"try-error")==FALSE){
+        #if(class(fit.m)!="try-error"){
             ll.mcand[i] <- fit.m$LogLik
         }
     }

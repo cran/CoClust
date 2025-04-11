@@ -1,3 +1,8 @@
+1.0
+   - increased value for dimset up to 50
+   - introduced some missing package anchors in CoClust-class.Rd and CoClust.Rd
+   - updated some references
+ 
 0.3-2
    - updated references
    - added importFrom("stats", "approxfun", "cor", "median", "optim", "pnorm","sd") in the NAMESPACE file
